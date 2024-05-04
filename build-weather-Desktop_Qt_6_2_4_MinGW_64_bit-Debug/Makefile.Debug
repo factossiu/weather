@@ -289,6 +289,10 @@ debug/moc_mainwindow.cpp: ../weather/mainwindow.h \
 		../../../qt/6.2.4/mingw_64/include/QtCore/qnativeinterface.h \
 		../../../qt/6.2.4/mingw_64/include/QtWidgets/qtabwidget.h \
 		../../../qt/6.2.4/mingw_64/include/QtGui/qicon.h \
+		../../../qt/6.2.4/mingw_64/include/QtGui/QCursor \
+		../../../qt/6.2.4/mingw_64/include/QtWidgets/QMenu \
+		../../../qt/6.2.4/mingw_64/include/QtWidgets/qmenu.h \
+		../../../qt/6.2.4/mingw_64/include/QtGui/qaction.h \
 		debug/moc_predefs.h \
 		../../../qt/6.2.4/mingw_64/bin/moc.exe
 	E:\qt\6.2.4\mingw_64\bin\moc.exe $(DEFINES) --include E:/school/projiect-tianqi/build-weather-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/debug/moc_predefs.h -IE:/qt/6.2.4/mingw_64/mkspecs/win32-g++ -IE:/school/projiect-tianqi/weather -IE:/qt/6.2.4/mingw_64/include -IE:/qt/6.2.4/mingw_64/include/QtWidgets -IE:/qt/6.2.4/mingw_64/include/QtGui -IE:/qt/6.2.4/mingw_64/include/QtCore -I. -IE:/qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++ -IE:/qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32 -IE:/qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward -IE:/qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include -IE:/qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed -IE:/qt/Tools/mingw1120_64/x86_64-w64-mingw32/include ..\weather\mainwindow.h -o debug\moc_mainwindow.cpp
@@ -446,6 +450,10 @@ debug/main.o: ../weather/main.cpp ../weather/mainwindow.h \
 		../../../qt/6.2.4/mingw_64/include/QtCore/qnativeinterface.h \
 		../../../qt/6.2.4/mingw_64/include/QtWidgets/qtabwidget.h \
 		../../../qt/6.2.4/mingw_64/include/QtGui/qicon.h \
+		../../../qt/6.2.4/mingw_64/include/QtGui/QCursor \
+		../../../qt/6.2.4/mingw_64/include/QtWidgets/QMenu \
+		../../../qt/6.2.4/mingw_64/include/QtWidgets/qmenu.h \
+		../../../qt/6.2.4/mingw_64/include/QtGui/qaction.h \
 		../../../qt/6.2.4/mingw_64/include/QtWidgets/QApplication \
 		../../../qt/6.2.4/mingw_64/include/QtWidgets/qapplication.h \
 		../../../qt/6.2.4/mingw_64/include/QtCore/qcoreapplication.h \
@@ -599,7 +607,34 @@ debug/mainwindow.o: ../weather/mainwindow.cpp ../weather/mainwindow.h \
 		../../../qt/6.2.4/mingw_64/include/QtCore/qnativeinterface.h \
 		../../../qt/6.2.4/mingw_64/include/QtWidgets/qtabwidget.h \
 		../../../qt/6.2.4/mingw_64/include/QtGui/qicon.h \
-		ui_mainwindow.h
+		../../../qt/6.2.4/mingw_64/include/QtGui/QCursor \
+		../../../qt/6.2.4/mingw_64/include/QtWidgets/QMenu \
+		../../../qt/6.2.4/mingw_64/include/QtWidgets/qmenu.h \
+		../../../qt/6.2.4/mingw_64/include/QtGui/qaction.h \
+		ui_mainwindow.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/QVariant \
+		../../../qt/6.2.4/mingw_64/include/QtWidgets/QApplication \
+		../../../qt/6.2.4/mingw_64/include/QtWidgets/qapplication.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qcoreapplication.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qeventloop.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qcoreapplication_platform.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qfuture.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qfutureinterface.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qmutex.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qresultstore.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qfuture_impl.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qthreadpool.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qthread.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qdeadlinetimer.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qelapsedtimer.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qrunnable.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qexception.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qpromise.h \
+		../../../qt/6.2.4/mingw_64/include/QtGui/qguiapplication.h \
+		../../../qt/6.2.4/mingw_64/include/QtGui/qinputmethod.h \
+		../../../qt/6.2.4/mingw_64/include/QtCore/qlocale.h \
+		../../../qt/6.2.4/mingw_64/include/QtGui/qguiapplication_platform.h \
+		../../../qt/6.2.4/mingw_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o ..\weather\mainwindow.cpp
 
 debug/qrc_main.o: debug/qrc_main.cpp 

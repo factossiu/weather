@@ -36,6 +36,6 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
     //弹出右键菜单
     mExitMenu->exec(QCursor::pos());
 
-    event->accept();
+   // event->accept();
 }
 
