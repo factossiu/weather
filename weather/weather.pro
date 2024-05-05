@@ -13,7 +13,9 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    weatherData.h \
+    weatherTool.h
 
 FORMS += \
     mainwindow.ui

@@ -8,6 +8,8 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QMessageBox>
+#include "weatherData.h"
+#include "weatherTool.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -26,16 +28,34 @@ private:
     QMenu *mExitMenu; //右键退出的菜单
     QAction *mExitAct;//退出的行为
 
-    QNetworkAccessManager *mNetAccessManager;
+    QNetworkAccessManager *mNetAccessManager;\
+    Today mToday;
+    Day mDay[6];
+    //星期和日期
+    QList<QLabel*> mWeekList;
+    QList<QLabel*> mDateList;
+    //天气和天气图标
+    QList<QLabel*> mTypeList;
+    QList<QLabel*> mTypeIconList;
+    //天气污染指数
+    QList<QLabel*> mAqiList;
+    //风力和风向
+    QList<QLabel*> mFxList;
+    QList<QLabel*> mF1List;
+
+    QMap<QString,QString> todayTypeMap;
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
     QPoint mOffset;//窗口移动时  鼠标与窗口左上角的偏移值
-    void getWeatherInfo(QString cityCode);
+    void getWeatherInfo(QString cityName);
+    void paresJson(QByteArray byteArray);
+    void updateUI();
 private slots:
     void onReplied(QNetworkReply *reply);
 
 
+    void on_btnSearch_clicked();
 };
 #endif // MAINWINDOW_H
