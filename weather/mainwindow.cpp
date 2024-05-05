@@ -3,6 +3,11 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include<QJsonObject>
+#include<QPainter>
+#define INCREMENT 3 //温度每升高/降低 一度  y轴坐标的增量
+#define POINT_REDIUS 3 //曲线描点的大小
+#define TEXT_OFFSET_X 8 //X轴偏移
+#define TEXT_OFFSET_Y 8 //X轴偏移
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -105,7 +110,10 @@ MainWindow::MainWindow(QWidget *parent)
     todayTypeMap.insert("中雨",":/res/type/ZhongYu.png");
     //直接在构造中，请求天气数据
     getWeatherInfo("重庆");
-
+    //5.给标签添加事件过滤器
+    //参数指定为当前窗口对象 MainWindow
+    ui->lblHighCurve->installEventFilter(this);
+    ui->lblLowCurve->installEventFilter(this);
 }
 
 MainWindow::~MainWindow()
@@ -159,21 +167,22 @@ void MainWindow::paresJson(QByteArray byteArray) //解析返过来的Json数据
    QJsonObject objData =  rootObj.value("data").toObject();
    QJsonObject objYesterday = objData.value("yesterday").toObject();
    mDay[0].week= objYesterday.value("week").toString();
-   mDay[0].week= objYesterday.value("ymd").toString();
+   mDay[0].date= objYesterday.value("ymd").toString();
 
    mDay[0].type = objYesterday.value("type").toString();
    QString s;
 
    s = objYesterday.value("high").toString().split(" ").at(1);
-   s.left(s.length()-1);
+   s = s.left(s.length()-1);
    mDay[0].high = s.toInt();
 
    s = objYesterday.value("low").toString().split(" ").at(1);
-   s.left(s.length()-1);
+   s = s.left(s.length()-1);
    mDay[0].low = s.toInt();
     //风向风力
    mDay[0].fx = objYesterday.value("fx").toString();
    mDay[0].f1 = objYesterday.value("fl").toString();
+
     //aqi
    mDay[0].aqi = objYesterday.value("aqi").toDouble();
 
@@ -203,7 +212,7 @@ void MainWindow::paresJson(QByteArray byteArray) //解析返过来的Json数据
    }
    //4.解析今天的数据
    mToday.ganmao = objData.value("ganmao").toString();
-   mToday.wendu = objData.value("wendu").toString().toInt();
+   mToday.wendu = objData.value("wendu").toString().toDouble();
    mToday.shidu = objData.value("shidu").toString();
    mToday.pm25 = objData.value("pm25").toDouble();
    mToday.quality = objData.value("quality").toString();
@@ -215,6 +224,10 @@ void MainWindow::paresJson(QByteArray byteArray) //解析返过来的Json数据
    mToday.low = mDay[1].low;
    //更新UI
    updateUI();
+
+   //6.2 绘制温度曲线
+   ui->lblHighCurve->update();
+   ui->lblLowCurve->update();
 }
 
 void MainWindow::updateUI()
@@ -312,5 +325,90 @@ void MainWindow::on_btnSearch_clicked()
 {
    QString cityName = ui->leCity->text();
    getWeatherInfo(cityName);
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event){
+   if(watched == ui->lblHighCurve && event->type() == QEvent::Paint)
+      painHighCurve();
+
+   if(watched == ui->lblLowCurve && event->type() == QEvent::Paint)
+      paintLowCurve();
+
+   //执行完我们的操作后,继续父类的操作
+   return QWidget::eventFilter(watched, event);
+}
+void MainWindow::panit(QString HighOrLow)
+{
+   QLabel * Now = nullptr; // 当前要绘制的曲线标签
+   QColor color; // 曲线的颜色
+   if(HighOrLow == "High")
+   {
+      Now = ui->lblHighCurve; // 获取高温曲线标签
+      color = QColor(255,170,0); // 设置高温曲线颜色为橙色
+   }
+   else if(HighOrLow == "Low")
+   {
+      Now = ui->lblLowCurve; // 获取低温曲线标签
+      color = QColor(0,255,255); // 设置低温曲线颜色为青色
+   }
+   else
+   {
+      return; // 如果不是"High"或"Low"，则直接返回
+   }
+
+   QPainter painter(Now); // 创建一个绘图对象，绘制在当前曲线标签上
+   painter.setRenderHint(QPainter::Antialiasing, true); // 设置抗锯齿
+
+   int pointX[6] = {0}; // 存储X坐标
+   int tempSum = 0; // 温度总和
+   int tempAverage = 0; // 温度平均值
+   int value;
+
+   // 获取X坐标
+   for (int i = 0; i < 6; ++i) {
+      pointX[i] = mWeekList[i]->pos().x() + mWeekList[i]->width() / 2;
+      value = (HighOrLow == "High") ? mDay[i].high : mDay[i].low;
+      tempSum += value;
+   }
+   tempAverage = tempSum / 6; // 计算温度平均值
+
+   int pointY[6] = {0}; // 存储Y坐标
+   int yCenter = Now->height() / 2; // Y轴中心坐标
+
+   // 计算Y轴坐标
+   for (int i = 0; i < 6; ++i) {
+      value = (HighOrLow == "High") ? mDay[i].high : mDay[i].low;
+      pointY[i] = yCenter - ((value - tempAverage) * INCREMENT);
+   }
+
+   QPen pen = painter.pen(); // 获取当前画笔
+   pen.setWidth(1); // 设置画笔宽度
+   pen.setColor(color); // 设置画笔颜色
+   painter.setPen(pen); // 设置画笔
+
+   painter.setBrush(color); // 设置画刷颜色
+
+   // 绘制点和温度文本
+   for (int i = 0; i < 6; ++i) {
+      painter.drawEllipse(QPoint(pointX[i], pointY[i]), POINT_REDIUS, POINT_REDIUS); // 绘制点
+      int value = (HighOrLow == "High") ? mDay[i].high : mDay[i].low;
+      painter.drawText(pointX[i] - TEXT_OFFSET_X, pointY[i] - TEXT_OFFSET_Y, QString::number(value) + "°"); // 绘制温度文本
+   }
+
+   // 绘制连线
+   for (int i = 0; i < 5; ++i) {
+      pen.setStyle(i == 0 ? Qt::SolidLine : Qt::DotLine); // 设置画笔样式
+      painter.setPen(pen); // 设置画笔
+      painter.drawLine(pointX[i], pointY[i], pointX[i+1], pointY[i+1]); // 绘制线段
+   }
+}
+void MainWindow::painHighCurve()
+{
+ panit("High");
+}
+
+void MainWindow::paintLowCurve()
+{
+ panit("Low");
 }
 

@@ -52,6 +52,13 @@ protected:
     void getWeatherInfo(QString cityName);
     void paresJson(QByteArray byteArray);
     void updateUI();
+
+    bool eventFilter(QObject *watched, QEvent *event);
+
+    //绘制曲线
+    void painHighCurve();
+    void paintLowCurve();
+    void panit(QString HighOrLow);
 private slots:
     void onReplied(QNetworkReply *reply);
 
